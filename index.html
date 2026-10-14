@@ -1,0 +1,762 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Daily Grind — a fictional café concept by PixelCraft Studio.">
+  <meta name="theme-color" content="#f7f4ee">
+  <title>The Daily Grind — Coffee, Made Personal</title>
+
+  <style>
+    :root {
+      --cream: #f7f4ee;
+      --paper: #fffdf8;
+      --ink: #292820;
+      --muted: #77766d;
+      --green: #354b3d;
+      --green-light: #e5e9df;
+      --orange: #b8784e;
+      --line: #e6e1d7;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.6;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .container { width: min(1160px, 90%); margin-inline: auto; }
+
+    .announcement {
+      background: var(--green);
+      color: white;
+      text-align: center;
+      padding: 9px 15px;
+      font-size: 11px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+    }
+
+    .site-header {
+      background: var(--paper);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 78px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 25px;
+    }
+
+    .brand {
+      font-family: var(--serif);
+      font-size: 25px;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      white-space: nowrap;
+    }
+
+    .brand span { color: var(--orange); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      font-size: 13px;
+    }
+
+    .nav-links a:not(.nav-cta):hover { color: var(--orange); }
+
+    .nav-cta, .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      background: var(--green);
+      color: white;
+      padding: 13px 21px;
+      border: 1px solid var(--green);
+      font-size: 12px;
+      letter-spacing: .3px;
+      transition: background .2s, color .2s, transform .2s;
+    }
+
+    .nav-cta:hover, .button:hover {
+      background: transparent;
+      color: var(--green);
+      transform: translateY(-2px);
+    }
+
+    .menu-toggle {
+      display: none;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .hero {
+      padding: 48px 0 72px;
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 65px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--green);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      margin-bottom: 23px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--orange);
+    }
+
+    h1, h2, h3 { font-family: var(--serif); font-weight: 400; }
+
+    h1 {
+      font-size: clamp(48px, 6vw, 79px);
+      letter-spacing: -3.5px;
+      line-height: 1.03;
+      margin-bottom: 25px;
+    }
+
+    h1 em { color: var(--green); font-weight: 400; }
+
+    .hero-copy {
+      color: var(--muted);
+      max-width: 420px;
+      font-size: 15px;
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 22px;
+    }
+
+    .text-link {
+      font-size: 12px;
+      border-bottom: 1px solid var(--orange);
+      padding-bottom: 4px;
+    }
+
+    .hero-visual { position: relative; }
+
+    .hero-image {
+      width: 100%;
+      height: 535px;
+      object-fit: cover;
+      background: #ddd4c5;
+    }
+
+    .image-note {
+      position: absolute;
+      left: -24px;
+      bottom: 27px;
+      background: var(--paper);
+      padding: 17px 21px;
+      box-shadow: 0 10px 35px #29282012;
+      max-width: 220px;
+    }
+
+    .image-note strong {
+      display: block;
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .image-note span { font-size: 11px; color: var(--muted); }
+
+    .intro-strip {
+      background: var(--green);
+      color: white;
+      padding: 23px 0;
+    }
+
+    .strip-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .strip-inner span {
+      font-size: 10px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+    }
+
+    .strip-inner b { color: #d9b18b; font-weight: 400; }
+
+    section.content-section { padding: 100px 0; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .section-head h2, .story h2, .visit h2 {
+      font-size: clamp(38px, 4.4vw, 57px);
+      line-height: 1.08;
+      letter-spacing: -1.8px;
+    }
+
+    .section-head p {
+      max-width: 320px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .menu-card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .menu-photo {
+      height: 245px;
+      width: 100%;
+      object-fit: cover;
+      background: #e2d7c8;
+      transition: transform .4s;
+    }
+
+    .menu-card:hover .menu-photo { transform: scale(1.035); }
+
+    .menu-image-wrap { overflow: hidden; }
+
+    .menu-info { padding: 23px; }
+
+    .menu-info h3 { font-size: 24px; margin-bottom: 8px; }
+
+    .menu-info p { color: var(--muted); font-size: 12px; min-height: 40px; }
+
+    .menu-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: 18px;
+      border-top: 1px solid var(--line);
+      padding-top: 15px;
+    }
+
+    .price { color: var(--green); font-weight: 700; font-size: 14px; }
+    .category { color: var(--muted); font-size: 10px; text-transform: uppercase; letter-spacing: 1px; }
+
+    .story {
+      background: var(--green-light);
+      padding: 90px 0;
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 75px;
+      align-items: center;
+    }
+
+    .story-image {
+      width: 100%;
+      height: 490px;
+      object-fit: cover;
+      background: #d2c9b9;
+    }
+
+    .story-copy > p {
+      color: #66685e;
+      font-size: 14px;
+      margin: 22px 0;
+      max-width: 460px;
+    }
+
+    .story-signature {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 21px;
+      color: var(--green);
+      margin-top: 28px;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      grid-template-rows: 220px 220px;
+      gap: 14px;
+    }
+
+    .gallery-grid img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #ded3c4;
+    }
+
+    .gallery-grid img:first-child {
+      grid-row: span 2;
+    }
+
+    .visit {
+      background: var(--paper);
+      border-top: 1px solid var(--line);
+    }
+
+    .visit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    .visit-copy > p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 20px;
+      max-width: 430px;
+    }
+
+    .visit-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 32px;
+    }
+
+    .detail h3 { font-size: 20px; margin-bottom: 10px; }
+    .detail p { font-size: 12px; color: var(--muted); margin: 5px 0; }
+
+    .contact-panel {
+      padding: 35px;
+      background: var(--cream);
+      border: 1px solid var(--line);
+    }
+
+    .contact-panel h3 { font-size: 30px; margin-bottom: 12px; }
+    .contact-panel p { color: var(--muted); font-size: 13px; margin-bottom: 22px; }
+
+    .contact-panel .button { width: 100%; }
+
+    .demo-disclaimer {
+      margin-top: 17px !important;
+      margin-bottom: 0 !important;
+      font-size: 10px !important;
+    }
+
+    footer {
+      background: #242b24;
+      color: #f7f4ee;
+      padding: 45px 0 22px;
+    }
+
+    .footer-main {
+      display: flex;
+      justify-content: space-between;
+      gap: 30px;
+      align-items: start;
+      padding-bottom: 30px;
+    }
+
+    .footer-main p {
+      max-width: 300px;
+      color: #c4c8bf;
+      font-size: 12px;
+      margin-top: 12px;
+    }
+
+    .footer-links { display: flex; flex-wrap: wrap; gap: 22px; font-size: 12px; }
+
+    .footer-bottom {
+      border-top: 1px solid #ffffff25;
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      color: #c4c8bf;
+      font-size: 10px;
+    }
+
+    @media (max-width: 850px) {
+      .nav-links { gap: 16px; }
+      .hero { gap: 32px; }
+      .hero-image { height: 440px; }
+      .story-grid { gap: 38px; }
+      .gallery-grid { grid-template-rows: 180px 180px; }
+    }
+
+    @media (max-width: 680px) {
+      .container { width: min(100% - 36px, 520px); }
+      .nav { min-height: 70px; }
+      .brand { font-size: 23px; }
+      .menu-toggle { display: inline-block; }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        padding: 20px 5%;
+        background: var(--paper);
+        border-bottom: 1px solid var(--line);
+        align-items: stretch;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px 0; }
+      .nav-links .nav-cta { margin-top: 10px; text-align: center; }
+
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 55px 0 60px;
+        gap: 32px;
+      }
+
+      h1 { font-size: clamp(48px, 13vw, 68px); letter-spacing: -2.5px; }
+      .hero-image { height: 360px; }
+      .image-note { left: 12px; bottom: 12px; }
+
+      .strip-inner { justify-content: center; text-align: center; gap: 10px 18px; }
+      .strip-inner span { font-size: 9px; }
+
+      section.content-section { padding: 68px 0; }
+      .section-head { display: block; margin-bottom: 28px; }
+      .section-head p { margin-top: 14px; }
+
+      .menu-grid { grid-template-columns: 1fr; gap: 18px; }
+      .menu-photo { height: 250px; }
+      .menu-info p { min-height: 0; }
+
+      .story { padding: 65px 0; }
+      .story-grid { grid-template-columns: 1fr; gap: 30px; }
+      .story-image { height: 340px; }
+
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 210px 150px 150px;
+        gap: 10px;
+      }
+
+      .gallery-grid img:first-child { grid-row: auto; grid-column: span 2; }
+
+      .visit-grid { grid-template-columns: 1fr; gap: 32px; }
+      .visit-details { gap: 20px; }
+      .contact-panel { padding: 25px; }
+      .footer-main { flex-direction: column; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="announcement">
+    A little pause in your everyday — welcome to our café
+  </div>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="#home" aria-label="The Daily Grind home">
+        the daily<span>grind.</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle"
+        aria-label="Open navigation menu"
+        aria-expanded="false" aria-controls="navLinks">
+        ☰ Menu
+      </button>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
+        <a href="#menu">Our Menu</a>
+        <a href="#story">Our Story</a>
+        <a href="#gallery">The Space</a>
+        <a href="#visit" class="nav-cta">Find Your Table ↗</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero container" id="home">
+      <div class="hero-copy-wrap">
+        <div class="eyebrow">Good coffee, good days</div>
+        <h1>Your daily ritual, <em>made special.</em></h1>
+        <p class="hero-copy">
+          Thoughtfully brewed coffee, fresh-from-the-oven treats,
+          and a welcoming corner to slow down and enjoy the little things.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#menu">Explore the menu ↗</a>
+          <a class="text-link" href="#story">Get to know us</a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <img class="hero-image"
+          src="https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=1200&q=85"
+          alt="Warm, inviting coffee shop interior"
+          fetchpriority="high">
+        <div class="image-note">
+          <strong>Take a moment.</strong>
+          <span>Your favourite cup is waiting.</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="intro-strip">
+      <div class="container strip-inner">
+        <span><b>✳</b> Carefully brewed</span>
+        <span><b>✳</b> Freshly prepared</span>
+        <span><b>✳</b> Made for slowing down</span>
+      </div>
+    </div>
+
+    <section class="content-section container" id="menu">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">From our counter</div>
+          <h2>Simple things.<br>Done beautifully.</h2>
+        </div>
+        <p>From your first morning coffee to a slow afternoon treat,
+          there's something here for your kind of day.</p>
+      </div>
+
+      <div class="menu-grid">
+        <article class="menu-card">
+          <div class="menu-image-wrap">
+            <img class="menu-photo"
+              src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=85"
+              alt="Freshly prepared cup of coffee" loading="lazy">
+          </div>
+          <div class="menu-info">
+            <div class="category">Coffee · Signature</div>
+            <h3>House Cappuccino</h3>
+            <p>Rich espresso, silky milk and a beautifully soft foam.</p>
+            <div class="menu-bottom">
+              <span class="price">₹160</span>
+              <span class="category">Customer favourite</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <div class="menu-image-wrap">
+            <img class="menu-photo"
+              src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=85"
+              alt="Iced coffee served in a glass" loading="lazy">
+          </div>
+          <div class="menu-info">
+            <div class="category">Coffee · Chilled</div>
+            <h3>Iced Caramel Latte</h3>
+            <p>Cool espresso, creamy milk and a hint of caramel.</p>
+            <div class="menu-bottom">
+              <span class="price">₹190</span>
+              <span class="category">Served chilled</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="menu-card">
+          <div class="menu-image-wrap">
+            <img class="menu-photo"
+              src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=85"
+              alt="Freshly baked croissants and pastries" loading="lazy">
+          </div>
+          <div class="menu-info">
+            <div class="category">Bakery · Freshly baked</div>
+            <h3>Butter Croissant</h3>
+            <p>Golden, flaky layers made for your next coffee break.</p>
+            <div class="menu-bottom">
+              <span class="price">₹130</span>
+              <span class="category">Bakery favourite</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="story" id="story">
+      <div class="container story-grid">
+        <img class="story-image"
+          src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=1000&q=85"
+          alt="Barista preparing coffee with care" loading="lazy">
+
+        <div class="story-copy">
+          <div class="eyebrow">A little about us</div>
+          <h2>Not just a coffee.<br>A feeling.</h2>
+          <p>
+            We believe a café should feel like a deep breath in the middle
+            of a busy day. A place for good conversations, quiet reading,
+            creative ideas and one more cup.
+          </p>
+          <p>
+            Our idea is simple: make the everyday feel a little more
+            thoughtful, one cup at a time.
+          </p>
+          <a class="text-link" href="#visit">Come spend a little time with us ↗</a>
+          <div class="story-signature">Made for your everyday.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section container" id="gallery">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">The café feeling</div>
+          <h2>A space to settle in.</h2>
+        </div>
+        <p>A corner for catching up, getting things done,
+          or simply enjoying a moment to yourself.</p>
+      </div>
+
+      <div class="gallery-grid">
+        <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=900&q=85"
+          alt="Coffee being prepared by a barista" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1493857671505-72967e2e2760?auto=format&fit=crop&w=700&q=85"
+          alt="Relaxed café seating" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=85"
+          alt="Coffee and café table details" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=700&q=85"
+          alt="Cosy coffee shop atmosphere" loading="lazy">
+        <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=700&q=85"
+          alt="A freshly made coffee" loading="lazy">
+      </div>
+    </section>
+
+    <section class="content-section visit" id="visit">
+      <div class="container visit-grid">
+        <div class="visit-copy">
+          <div class="eyebrow">Your next coffee break</div>
+          <h2>We'll save you<br>a little time.</h2>
+          <p>
+            Drop by for your morning pick-me-up, an afternoon catch-up
+            or a quiet moment with your favourite book.
+          </p>
+
+          <div class="visit-details">
+            <div class="detail">
+              <h3>Find us</h3>
+              <p>Fictional café concept</p>
+              <p>Pune, Maharashtra</p>
+            </div>
+            <div class="detail">
+              <h3>Opening hours</h3>
+              <p>Mon–Fri: 8 AM – 8 PM</p>
+              <p>Sat–Sun: 9 AM – 9 PM</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-panel">
+          <div class="eyebrow">Let's make it a date</div>
+          <h3>Your table is waiting.</h3>
+          <p>
+            This is a sample contact panel. Replace the demo details
+            with a real café's contact information before launching for a client.
+          </p>
+          <a class="button" href="mailto:hello@example.com?subject=Coffee%20enquiry">
+            Send a sample email ↗
+          </a>
+          <p class="demo-disclaimer">
+            DEMO ONLY · No real bookings are being accepted.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footer-main">
+        <div>
+          <a class="brand" href="#home">the daily<span>grind.</span></a>
+          <p>A fictional café website concept, thoughtfully designed by PixelCraft Studio.</p>
+        </div>
+        <div class="footer-links">
+          <a href="#home">Home</a>
+          <a href="#menu">Menu</a>
+          <a href="#story">Our Story</a>
+          <a href="#gallery">Gallery</a>
+          <a href="#visit">Contact</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 The Daily Grind · Fictional demo project</span>
+        <span>Website concept by PixelCraft Studio</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuToggle = document.getElementById("menuToggle");
+    const navLinks = document.getElementById("navLinks");
+
+    menuToggle.addEventListener("click", () => {
+      const isOpen = navLinks.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(isOpen));
+      menuToggle.setAttribute(
+        "aria-label",
+        isOpen ? "Close navigation menu" : "Open navigation menu"
+      );
+      menuToggle.innerHTML = isOpen ? "✕ Close" : "☰ Menu";
+    });
+
+    navLinks.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", () => {
+        navLinks.classList.remove("open");
+        menuToggle.setAttribute("aria-expanded", "false");
+        menuToggle.setAttribute("aria-label", "Open navigation menu");
+        menuToggle.innerHTML = "☰ Menu";
+      });
+    });
+  </script>
+</body>
+</html>
